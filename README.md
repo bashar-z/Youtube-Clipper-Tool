@@ -1,14 +1,19 @@
 # 🎬 YouTube Clipper
 
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://youtube-clipper.streamlit.app)
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bashar-z/Youtube-Clipper-Tool/blob/main/Clipper_Project.ipynb)
 
-Google Colab-based tool for quickly clipping and downloading specific segments from YouTube videos.  
-Simple interactive interface with start/end time pickers, ideal for stream editors and creators working with YouTube VODs.
+Simple, browser-based tool for clipping and downloading specific segments from YouTube videos.  
+Clean interface with timestamp controls — ideal for editors, streamers, and creators working with YouTube VODs.
+
+Choose how you want to run it:
+- **Streamlit App (Recommended):** No setup, works directly in your browser.
+- **Google Colab:** For users who prefer a notebook environment.
 
 ---
 
 ## 📦 What It Can Do
-- Download and clip any YouTube video segment (for videos you have rights to).
+- Download and clip any YouTube video segment.
 - Keep full video + audio quality.
 - Interactive UI with arrow controls for hours, minutes, and seconds.
 - Automatic MP4 download directly in Colab.
@@ -17,31 +22,34 @@ Simple interactive interface with start/end time pickers, ideal for stream edito
 ---
 
 ## 🖥 Interface
-**Platform:** Google Colab  
-**UI:** Interactive widgets (`ipywidgets`)  
+**Platform:** Streamlit (and optional Colab)  
+**UI:** Interactive time controls  
 **Backend:** `yt-dlp` + `ffmpeg`  
 **Output Format:** MP4  
-**Environment:** Runs entirely in the browser
+**Environment:** Fully browser-based, no local install needed
 
 ---
 
 ## 🚀 Quick Start
-1. Click the Colab badge above to launch the notebook.  
-2. Paste the YouTube video link.  
-3. Adjust the start and end times using the arrow pickers.  
-4. Press **🎬 Clip & Download**.  
-5. Wait until the clip finishes — it will automatically download when ready.
+1. Click **Open in Streamlit** above to launch the web app.  
+2. Paste a YouTube video link.  
+3. Adjust the start and end times.  
+4. Click **🎬 Clip & Download**.  
+5. Wait a few seconds — your MP4 will be ready to download.
 
 ---
 
 ## ⚙️ Requirements
-If you prefer running locally instead of Colab:
+If you prefer running locally instead of Streamlit:
 
-```
-pip install yt-dlp ipywidgets
+```bash
+pip install streamlit yt-dlp ffmpeg-python
 sudo apt install ffmpeg
 ```
-
+Then run:
+```
+streamlit run app.py
+```
 ---
 
 ## 🧩 How It Works
@@ -55,7 +63,7 @@ sudo apt install ffmpeg
 ## 📚 Example Use Cases
 - Clipping highlights from long YouTube VODs.  
 - Creating short viral segments for social media.  
-- Extracting reference sections from educational videos.  
+- Extracting reference sections from videos.  
 - Quick review and sharing of specific time-frames.
 
 ---
@@ -70,10 +78,10 @@ Always respect [YouTube’s Terms of Service](https://www.youtube.com/static?tem
 ## 🛠 Technical Details
 | Component | Purpose |
 |------------|----------|
-| **yt-dlp** | Handles video and audio stream extraction |
-| **ffmpeg** | Performs precise, lossless trimming |
-| **ipywidgets** | Provides time selection and UI controls |
-| **Colab Python 3 Runtime** | Browser-based execution environment |
+| **Streamlit** | Provides the interactive browser interface |
+| **yt-dlp** | Handles video and audio extraction |
+| **ffmpeg** | Performs precise trimming without re-encoding |
+| **Python 3** | Core runtime environment |
 
 ---
 
