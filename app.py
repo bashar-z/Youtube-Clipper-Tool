@@ -118,7 +118,7 @@ with info_container:
 st.divider()
 
 # Time pickers
-st.subheader("⏱ Start Time")
+st.subheader("Start Time")
 c1, c2, c3 = st.columns(3)
 with c1:
     sh = st.number_input("Hours", min_value=0, max_value=23, value=0, step=1, key="sh")
@@ -127,7 +127,7 @@ with c2:
 with c3:
     ss = st.number_input("Seconds", min_value=0, max_value=59, value=0, step=1, key="ss")
 
-st.subheader("🏁 End Time")
+st.subheader("End Time")
 c4, c5, c6 = st.columns(3)
 with c4:
     eh = st.number_input("Hours ", min_value=0, max_value=23, value=0, step=1, key="eh")
