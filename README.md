@@ -1,90 +1,61 @@
-# 🎬 YouTube Clipper
+# YouTube Clipper Tool
 
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://youtube-clipper.streamlit.app)
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/bashar-z/Youtube-Clipper-Tool/blob/main/Clipper_Project.ipynb)
 
-Simple, browser-based tool for clipping and downloading specific segments from YouTube videos.  
-Clean interface with timestamp controls — ideal for editors, streamers, and creators working with YouTube VODs.
+A Streamlit app for clipping YouTube videos you own or have permission to use. Paste a YouTube URL, choose start and end timestamps, then export the selected range as MP4 or MP3.
 
-Choose how you want to run it:
-- **Streamlit App (Recommended):** No setup, works directly in your browser.
-- **Google Colab:** For users who prefer a notebook environment.
+## Features
 
----
+- MP4 video clipping and MP3 audio extraction.
+- Timestamp input using `SS`, `MM:SS`, or `HH:MM:SS`.
+- Video metadata preview before clipping.
+- Source quality selector for smaller/faster or higher-quality clips.
+- Bundled FFmpeg support through `imageio-ffmpeg`, so local users do not need a separate FFmpeg install.
+- Optional `cookies.txt` upload for videos your browser account is allowed to view.
+- Clearer error messages for common `yt-dlp`, network, and FFmpeg failures.
 
-## 📦 What It Can Do
-- Download and clip any YouTube video segment.
-- Keep full video + audio quality.
-- Interactive UI with arrow controls for hours, minutes, and seconds.
-- Automatic MP4 download directly in Colab.
-- 100 % browser-based — no setup or installation needed.
+## Run Locally
 
----
-
-## 🖥 Interface
-**Platform:** Streamlit (and optional Colab)  
-**UI:** Interactive time controls  
-**Backend:** `yt-dlp` + `ffmpeg`  
-**Output Format:** MP4  
-**Environment:** Fully browser-based, no local install needed
-
----
-
-## 🚀 Quick Start
-1. Click **Open in Streamlit** above to launch the web app.  
-2. Paste a YouTube video link.  
-3. Adjust the start and end times.  
-4. Click **🎬 Clip & Download**.  
-5. Wait a few seconds — your MP4 will be ready to download.
-
----
-
-## ⚙️ Requirements
-If you prefer running locally instead of Streamlit:
-
-```bash
-pip install streamlit yt-dlp ffmpeg-python
-sudo apt install ffmpeg
-```
-Then run:
-```
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 streamlit run app.py
 ```
----
 
-## 🧩 How It Works
-1. `yt-dlp` fetches the best available video + audio streams.  
-2. The tool merges them into a single MP4 file.  
-3. `ffmpeg` trims only the selected section without re-encoding.  
-4. The final clip downloads automatically.
+Then open the local URL Streamlit prints, usually:
 
----
+```text
+http://localhost:8501
+```
 
-## 📚 Example Use Cases
-- Clipping highlights from long YouTube VODs.  
-- Creating short viral segments for social media.  
-- Extracting reference sections from videos.  
-- Quick review and sharing of specific time-frames.
+`localhost` means the app is running on your own computer. Other people cannot use your local copy unless you deploy it somewhere.
 
----
+## Deploy
 
-## ⚠️ Legal Notice
-This tool is intended for **personal and educational use only.**  
-Do **not** use it to download or redistribute copyrighted content.  
-Always respect [YouTube’s Terms of Service](https://www.youtube.com/static?template=terms).
+This project is ready for Streamlit Community Cloud:
 
----
+1. Push this repository to GitHub.
+2. Go to [share.streamlit.io](https://share.streamlit.io).
+3. Choose this repository.
+4. Set the main file path to `app.py`.
+5. Deploy.
 
-## 🛠 Technical Details
-| Component | Purpose |
-|------------|----------|
-| **Streamlit** | Provides the interactive browser interface |
-| **yt-dlp** | Handles video and audio extraction |
-| **ffmpeg** | Performs precise trimming without re-encoding |
-| **Python 3** | Core runtime environment |
+## Fixing HTTP 403 Errors
 
----
+Most `HTTP Error 403: Forbidden` failures come from an outdated `yt-dlp`, a video that needs browser authentication, or a temporary YouTube client change.
 
-## 🧾 License
-MIT License © 2025 Bashar Zaher  
-This project is not affiliated with or endorsed by YouTube or Google LLC.
+Update first:
+
+```powershell
+python -m pip install --upgrade yt-dlp
+```
+
+If your browser account can view the video but the app cannot, export a Netscape-format `cookies.txt` file from that browser profile and upload it in the sidebar. Only use cookies for videos you are authorized to access.
+
+## Legal Notice
+
+Use this tool only with videos you own, videos you have permission to process, or content where your use is otherwise lawful. Respect YouTube's Terms of Service and all applicable copyright rules.
+
+This project is not affiliated with YouTube or Google.

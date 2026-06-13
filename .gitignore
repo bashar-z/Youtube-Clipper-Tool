@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.streamlit/
+clips/
+downloads/
+tmp/
+*.part
+*.ytdl
+*.cookies.txt
+*.log
