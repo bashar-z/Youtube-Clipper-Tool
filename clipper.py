@@ -156,21 +156,19 @@ def create_clip(
         if info.duration is not None and end_seconds > info.duration:
             raise ClipError("End time is beyond the video duration.")
 
-        source_template = tmp_dir / f"source_{clip_id}.%(ext)s"
-        source_path = _download_source(
-            url=url,
-            output_template=source_template,
-            quality=quality,
-            ffmpeg_path=ffmpeg_path,
-            cookies_path=cookies_path,
-            progress=progress,
-        )
-
         title = clean_filename(info.title)
         start_label = format_timestamp(start_seconds).replace(":", "-")
         end_label = format_timestamp(end_seconds).replace(":", "-")
 
         if output_kind == "mp3":
+            source_template = tmp_dir / f"audio_source_{clip_id}.%(ext)s"
+            source_path = _download_audio_source(
+                url=url,
+                output_template=source_template,
+                ffmpeg_path=ffmpeg_path,
+                cookies_path=cookies_path,
+                progress=progress,
+            )
             output_path = tmp_dir / f"{title}_{start_label}_{end_label}.mp3"
             progress("Extracting audio clip...")
             _run_ffmpeg(
@@ -196,6 +194,15 @@ def create_clip(
             )
             mime = "audio/mpeg"
         else:
+            source_template = tmp_dir / f"source_{clip_id}.%(ext)s"
+            source_path = _download_source(
+                url=url,
+                output_template=source_template,
+                quality=quality,
+                ffmpeg_path=ffmpeg_path,
+                cookies_path=cookies_path,
+                progress=progress,
+            )
             output_path = tmp_dir / f"{title}_{start_label}_{end_label}.mp4"
             progress("Rendering video clip...")
             _clip_video(ffmpeg_path, source_path, output_path, start_seconds, end_seconds)
@@ -247,6 +254,39 @@ def _download_source(
         candidates = [prepared]
     if not candidates:
         raise ClipError("The download finished, but the video file could not be found.")
+
+    return max(candidates, key=lambda path: path.stat().st_size)
+
+
+def _download_audio_source(
+    url: str,
+    output_template: Path,
+    ffmpeg_path: str,
+    cookies_path: Path | None,
+    progress: ProgressFn,
+) -> Path:
+    opts = _base_ydl_opts(ffmpeg_path, cookies_path)
+    opts.update(
+        {
+            "outtmpl": str(output_template),
+            "format": "ba[ext=m4a]/ba/bestaudio/best",
+            "progress_hooks": [lambda data: _download_hook(data, progress)],
+        }
+    )
+
+    try:
+        with YoutubeDL(opts) as ydl:
+            info = ydl.extract_info(url, download=True)
+            prepared = Path(ydl.prepare_filename(info))
+    except Exception as exc:
+        raise ClipError(_friendly_ytdlp_error(exc)) from exc
+
+    candidates = list(output_template.parent.glob(f"{output_template.stem}.*"))
+    candidates = [path for path in candidates if path.suffix not in {".part", ".ytdl"}]
+    if not candidates and prepared.exists():
+        candidates = [prepared]
+    if not candidates:
+        raise ClipError("The download finished, but the audio file could not be found.")
 
     return max(candidates, key=lambda path: path.stat().st_size)
 
